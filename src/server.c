@@ -636,7 +636,7 @@ void process_type(char *input, char *output)
         fflush(stdout);
         exit(EXIT_FAILURE);
     }
-    env_p = path_copy;
+    env_p     = path_copy;
     output[0] = '\0';
     // search path (env_p) for next token in input
     search_term = strtok_r(input, " ", &input);
@@ -700,6 +700,7 @@ void process_other(char *command, const char *input, const char *output)
     char       *executable_msg      = NULL;
     char       *executable_msg_copy = NULL;
     const char *executable_path     = NULL;
+    char       *input_copy;
 
     //    printf("entering process other\n");
     //    printf("input: %s\n", input);
@@ -712,16 +713,16 @@ void process_other(char *command, const char *input, const char *output)
     args[0] = command;
     if(input != NULL)
     {
-        int   i          = 1;
-        char *input_copy = strdup(input);
+        int   i = 1;
         char *saveptr;
-        char *token = strtok_r(input_copy, " ", &saveptr);
+        char *token;
+        input_copy = strdup(input);
+        token      = strtok_r(input_copy, " ", &saveptr);
         while(token != NULL)
         {
             args[i++] = token;
             token     = strtok_r(NULL, " ", &saveptr);
         }
-        free(input_copy);
     }
     executable_msg = (char *)malloc(BUFFER_SIZE * sizeof(char));
     if(executable_msg == NULL)
@@ -739,7 +740,6 @@ void process_other(char *command, const char *input, const char *output)
     }
     printf("%s\n", executable_path);
 
-
     pid = fork();
     if(pid == -1)
     {
@@ -755,6 +755,11 @@ void process_other(char *command, const char *input, const char *output)
     else
     {
         wait(NULL);
+    }
+
+    if(input != NULL)
+    {
+        free(input_copy);
     }
     free(executable_msg);
     free((void *)args);
