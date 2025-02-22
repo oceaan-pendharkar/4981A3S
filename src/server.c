@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #define BUFFER_SIZE 1024
 
@@ -665,7 +666,7 @@ void process_type(char *input, char *output)
             exit(EXIT_FAILURE);
         }
         memset(executable_path, 0, BUFFER_SIZE);    // Set all bytes to zero
-                                                  //                printf("strlen(current_path) = %d\n", (int)strlen(current_path));
+                                                    //                printf("strlen(current_path) = %d\n", (int)strlen(current_path));
         strncat(executable_path, current_path, strlen(current_path));
         strncat(executable_path, "/", 1);
         strncat(executable_path, search_term, strlen(search_term));
