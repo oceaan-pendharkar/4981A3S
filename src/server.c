@@ -14,7 +14,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#define MAX_INPUT 1024
+#define BUFFER_SIZE 1024
 
 static void           setup_signal_handler(void);
 static void           sigint_handler(int signum);
@@ -466,13 +466,13 @@ int handle_client(int client_fd)
         printf("oshell$ ");
         fflush(stdout);
 
-        input = (char *)malloc(MAX_INPUT * sizeof(char));
+        input = (char *)malloc(BUFFER_SIZE * sizeof(char));
         if(!input)
         {
             perror("malloc");
             return EXIT_FAILURE;
         }
-        output = (char *)malloc(MAX_INPUT * sizeof(char));
+        output = (char *)malloc(BUFFER_SIZE * sizeof(char));
         if(!output)
         {
             perror("malloc");
@@ -480,7 +480,7 @@ int handle_client(int client_fd)
             return EXIT_FAILURE;
         }
         //        printf("waiting to read\n");
-        bytes_read = read(client_fd, input, MAX_INPUT - 1);
+        bytes_read = read(client_fd, input, BUFFER_SIZE - 1);
         if(bytes_read == 0)    // Client closed the connection
         {
             printf("Client disconnected.\n");
@@ -578,13 +578,13 @@ void process_cd(char *input)
     else
     {
         char *current_directory;
-        current_directory = (char *)malloc(MAX_INPUT * sizeof(char));
+        current_directory = (char *)malloc(BUFFER_SIZE * sizeof(char));
         if(!current_directory)
         {
             perror("malloc");
             return;
         }
-        getcwd(current_directory, MAX_INPUT);
+        getcwd(current_directory, BUFFER_SIZE);
         printf("Changed directory to %s\n", current_directory);
         fflush(stdout);
         free(current_directory);
@@ -596,8 +596,8 @@ void process_cd(char *input)
 void process_pwd(char *input)
 {
     char *current_directory;
-    current_directory = (char *)malloc(MAX_INPUT * sizeof(char));
-    getcwd(current_directory, MAX_INPUT);
+    current_directory = (char *)malloc(BUFFER_SIZE * sizeof(char));
+    getcwd(current_directory, BUFFER_SIZE);
     printf("Current directory: %s\n", current_directory);
     fflush(stdout);
     free(current_directory);
@@ -658,13 +658,13 @@ void process_type(char *input, char *output)
         }
 
         //        printf("current_path: %s\n", current_path);
-        executable_path = (char *)malloc(MAX_INPUT * sizeof(char));
+        executable_path = (char *)malloc(BUFFER_SIZE * sizeof(char));
         if(executable_path == NULL)
         {
             perror("malloc");
             exit(EXIT_FAILURE);
         }
-        memset(executable_path, 0, MAX_INPUT);    // Set all bytes to zero
+        memset(executable_path, 0, BUFFER_SIZE);    // Set all bytes to zero
                                                   //                printf("strlen(current_path) = %d\n", (int)strlen(current_path));
         strncat(executable_path, current_path, strlen(current_path));
         strncat(executable_path, "/", 1);
@@ -703,7 +703,7 @@ void process_other(char *command, const char *input, const char *output)
 
     //    printf("entering process other\n");
     //    printf("input: %s\n", input);
-    args = (char **)malloc(MAX_INPUT * sizeof(char *));
+    args = (char **)malloc(BUFFER_SIZE * sizeof(char *));
     if(args == NULL)
     {
         perror("malloc");
@@ -722,7 +722,7 @@ void process_other(char *command, const char *input, const char *output)
         free(input_copy);
     }
 
-    executable_msg = (char *)malloc(MAX_INPUT * sizeof(char));
+    executable_msg = (char *)malloc(BUFFER_SIZE * sizeof(char));
     if(executable_msg == NULL)
     {
         perror("malloc");
