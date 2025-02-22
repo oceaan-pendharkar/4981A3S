@@ -700,7 +700,7 @@ void process_other(char *command, const char *input, const char *output)
     char       *executable_msg      = NULL;
     char       *executable_msg_copy = NULL;
     const char *executable_path     = NULL;
-    char       *input_copy = NULL;
+    char       *input_copy          = NULL;
 
     //    printf("entering process other\n");
     //    printf("input: %s\n", input);
@@ -723,9 +723,7 @@ void process_other(char *command, const char *input, const char *output)
             args[i++] = token;
             token     = strtok_r(NULL, " ", &saveptr);
         }
-        for(int j = 0; j < i; j++) {
-            printf("%s\n", args[j]);
-            }
+        args[i] = NULL;
     }
     executable_msg = (char *)malloc(BUFFER_SIZE * sizeof(char));
     if(executable_msg == NULL)
@@ -741,7 +739,6 @@ void process_other(char *command, const char *input, const char *output)
     {
         executable_path = strtok_r(executable_msg_copy, " ", &executable_msg_copy);
     }
-    printf("%s\n", executable_path);
 
     pid = fork();
     if(pid == -1)
