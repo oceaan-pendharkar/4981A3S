@@ -737,6 +737,8 @@ void process_other(char *command, const char *input, const char *output)
     {
         executable_path = strtok_r(executable_msg_copy, " ", &executable_msg_copy);
     }
+    printf("%s\n", executable_path);
+
 
     pid = fork();
     if(pid == -1)
@@ -747,7 +749,6 @@ void process_other(char *command, const char *input, const char *output)
     if(pid == 0)
     {
         execv(executable_path, args);
-        printf("%s\n", executable_path);
         perror("execv");
         exit(EXIT_FAILURE);
     }
