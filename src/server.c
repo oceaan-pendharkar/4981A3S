@@ -645,7 +645,7 @@ void process_type(char *input, char *output)
 
     if(strcmp(search_term, "cd") == 0 || strcmp(search_term, "pwd") == 0 || strcmp(search_term, "echo") == 0 || strcmp(search_term, "type") == 0 || strcmp(search_term, "exit") == 0)
     {
-        strncat(output, "a builtin", 10);
+        strncat(output, "a builtin", BASE_TEN);
         found = true;
     }
     current_path = strtok_r(env_p, ":", &env_p);
@@ -687,7 +687,7 @@ void process_type(char *input, char *output)
     }
     if(found == false)
     {
-        strncat(output, "not found", 10);
+        strncat(output, "not found", BASE_TEN);
     }
     free(path_copy);
 }
