@@ -747,6 +747,7 @@ void process_other(char *command, const char *input, const char *output)
     if(pid == 0)
     {
         execv(executable_path, args);
+        printf("%s\n", executable_path);
         perror("execv");
         exit(EXIT_FAILURE);
     }
