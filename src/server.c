@@ -480,6 +480,7 @@ int handle_client(int client_fd)
             free(input);
             return EXIT_FAILURE;
         }
+        output[0] = '\0';
         //        printf("waiting to read\n");
         bytes_read = read(client_fd, input, BUFFER_SIZE - 1);
         if(bytes_read == 0)    // Client closed the connection
@@ -636,7 +637,6 @@ void process_type(char *input, char *output)
         exit(EXIT_FAILURE);
     }
     env_p = path_copy;
-
     // search path (env_p) for next token in input
     search_term = strtok_r(input, " ", &input);
     //            printf("search_term: %s\n", search_term);
