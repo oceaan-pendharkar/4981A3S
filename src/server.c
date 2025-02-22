@@ -723,6 +723,9 @@ void process_other(char *command, const char *input, const char *output)
             args[i++] = token;
             token     = strtok_r(NULL, " ", &saveptr);
         }
+        for(int j = 0; j < i; j++) {
+            printf("%s\n", args[j]);
+            }
     }
     executable_msg = (char *)malloc(BUFFER_SIZE * sizeof(char));
     if(executable_msg == NULL)
