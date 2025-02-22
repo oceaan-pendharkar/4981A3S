@@ -700,7 +700,7 @@ void process_other(char *command, const char *input, const char *output)
     char       *executable_msg      = NULL;
     char       *executable_msg_copy = NULL;
     const char *executable_path     = NULL;
-    char       *input_copy;
+    char       *input_copy = NULL;
 
     //    printf("entering process other\n");
     //    printf("input: %s\n", input);
