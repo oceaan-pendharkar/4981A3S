@@ -695,8 +695,6 @@ void process_type(char *input, char *output)
 void process_other(char *command, const char *input, const char *output)
 {
     char      **args;
-    char       *input_copy;
-    char       *input_ptr;
     pid_t       pid;
     char       *executable_msg      = NULL;
     char       *executable_msg_copy = NULL;
@@ -713,16 +711,17 @@ void process_other(char *command, const char *input, const char *output)
     args[0] = command;
     if(input != NULL)
     {
-        int i      = 1;
-        input_copy = strdup(input);
-        input_ptr  = input_copy;
-        while(input_ptr != NULL)
+        int   i          = 1;
+        char *input_copy = strdup(input);
+        char *saveptr;
+        char *token = strtok_r(input_copy, " ", &saveptr);
+        while(token != NULL)
         {
-            args[i++] = strtok_r(input_ptr, " ", &input_ptr);
+            args[i++] = token;
+            token     = strtok_r(NULL, " ", &saveptr);
         }
         free(input_copy);
     }
-
     executable_msg = (char *)malloc(BUFFER_SIZE * sizeof(char));
     if(executable_msg == NULL)
     {
