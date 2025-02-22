@@ -637,6 +637,7 @@ void process_type(char *input, char *output)
         exit(EXIT_FAILURE);
     }
     env_p = path_copy;
+    output[0] = '\0';
     // search path (env_p) for next token in input
     search_term = strtok_r(input, " ", &input);
     //            printf("search_term: %s\n", search_term);
