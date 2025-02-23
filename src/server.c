@@ -592,7 +592,6 @@ void process_cd(char *input)
         fflush(stdout);
         free(current_directory);
     }
-    free(input_copy);
 }
 
 // gets the current directory
