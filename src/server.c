@@ -591,7 +591,7 @@ void process_cd(char *input)
         fflush(stdout);
         free(current_directory);
     }
-    if(input)
+    if(input != NULL)
     {
         free(input);
     }
