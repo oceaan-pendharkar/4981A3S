@@ -7,7 +7,7 @@
 
 void display(const char *msg);
 void process_cd(char *input);
-void process_pwd(char *input);
+void process_pwd(void);
 void process_type(char *input, char *output);
 void process_other(char *command, const char *input, const char *output);
 int  handle_client(int client_fd);

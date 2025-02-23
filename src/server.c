@@ -536,7 +536,7 @@ int handle_client(int client_fd)
             }
             else if(strcmp(command, "pwd") == 0)
             {
-                process_pwd(saveptr);
+                process_pwd();
             }
             else if(strcmp(command, "echo") == 0)
             {
@@ -595,7 +595,7 @@ void process_cd(char *input)
 }
 
 // gets the current directory
-void process_pwd(char *input)
+void process_pwd(void)
 {
     char *current_directory;
     current_directory = (char *)malloc(BUFFER_SIZE * sizeof(char));
@@ -603,7 +603,6 @@ void process_pwd(char *input)
     printf("Current directory: %s\n", current_directory);
     fflush(stdout);
     free(current_directory);
-    free(input);
 }
 
 // gets the search term
