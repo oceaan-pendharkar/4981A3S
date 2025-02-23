@@ -418,7 +418,7 @@ static void setup_signal_handler(void)
 int handle_connection(int client_sockfd, const struct sockaddr_storage *client_addr)
 {
     int status;
-    printf("client_sockfd: %d\n", client_sockfd);
+    printf("A new client connected.\n");
 
     status = handle_client(client_sockfd);
     if(status == -1)
