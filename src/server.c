@@ -571,7 +571,8 @@ int handle_client(int client_fd)
 // changes directory and puts the new current directory in output
 void process_cd(char *input)
 {
-    const char *directory = strtok_r(input, " ", &input);
+    char       *input_copy = input;
+    const char *directory  = strtok_r(input_copy, " ", &input);
     if(chdir(directory) == -1)
     {
         printf("Failed to change directory to %s\n", directory);
@@ -591,10 +592,7 @@ void process_cd(char *input)
         fflush(stdout);
         free(current_directory);
     }
-    if(input != NULL)
-    {
-        free(input);
-    }
+    free(input_copy);
 }
 
 // gets the current directory
