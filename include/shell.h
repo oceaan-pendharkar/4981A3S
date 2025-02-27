@@ -5,7 +5,6 @@
 #ifndef PROGRAMMING101_DISPLAY_H
 #define PROGRAMMING101_DISPLAY_H
 
-void display(const char *msg);
 void process_cd(char *input);
 void process_pwd(void);
 void process_type(char *input, char *output);

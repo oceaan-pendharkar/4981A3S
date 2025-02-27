@@ -21,9 +21,9 @@ static void           setup_signal_handler(void);
 static void           sigint_handler(int signum);
 static void           parse_arguments(int argc, char *argv[], char **ip_address, char **port, char **backlog);
 static void           handle_arguments(const char *binary_name, const char *ip_address, const char *port_str, const char *backlog_str, in_port_t *port, int *backlog);
+_Noreturn static void usage(const char *program_name, int exit_code, const char *message);
 static in_port_t      parse_in_port_t(const char *binary_name, const char *port_str);
 static int            parse_positive_int(const char *binary_name, const char *str);
-_Noreturn static void usage(const char *program_name, int exit_code, const char *message);
 static void           convert_address(const char *address, struct sockaddr_storage *addr);
 static int            socket_create(int domain, int type, int protocol);
 static void           socket_bind(int sockfd, struct sockaddr_storage *addr, in_port_t port);
@@ -31,6 +31,8 @@ static void           start_listening(int server_fd, int backlog);
 static int            socket_accept_connection(int server_fd, struct sockaddr_storage *client_addr, socklen_t *client_addr_len);
 static int            handle_connection(int client_sockfd, const struct sockaddr_storage *client_addr);
 static void           socket_close(int sockfd);
+static void           reap_zombie(int sig);
+static void           setup_sigchild_handler(void);
 
 #define UNKNOWN_OPTION_MESSAGE_LEN 24
 #define BASE_TEN 10
@@ -57,6 +59,7 @@ int main(int argc, char *argv[])
     socket_bind(sockfd, &addr, port);
     start_listening(sockfd, backlog);
     setup_signal_handler();
+    setup_sigchild_handler();
 
     while(!exit_flag)
     {
@@ -440,6 +443,31 @@ static void socket_close(int sockfd)
     }
 }
 
+static void setup_sigchild_handler(void)
+{
+    struct sigaction sa;
+
+    memset(&sa, 0, sizeof(sa));
+
+#if defined(__clang__)
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
+#endif
+    sa.sa_handler = reap_zombie;
+#if defined(__clang__)
+    #pragma clang diagnostic pop
+#endif
+
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+
+    if(sigaction(SIGCHLD, &sa, NULL) == -1)
+    {
+        perror("sigaction");
+        exit(EXIT_FAILURE);
+    }
+}
+
 int handle_client(int client_fd)
 {
     char *input;
@@ -766,7 +794,10 @@ void process_other(char *command, const char *input, const char *output)
     fflush(stdout);
 }
 
-// fork and exec test cases:
-// ls
-// cat
-// compile and run your program with gcc
+void reap_zombie(int sig)
+{
+    (void)sig;    // mark unused for compiler warnings
+    while(waitpid(-1, NULL, WNOHANG) > 0)
+    {
+    }
+}
